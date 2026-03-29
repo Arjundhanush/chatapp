@@ -6,7 +6,7 @@ const TodoModel = require('./models/todo')
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect('mongodb://192.168.216.1:27017/todolist')
+mongoose.connect('mongodb://192.168.216.1:27017/tododb')
 app.post('/add', (req, res) => {
     const task=req.body.task;
     TodoModel.create({task:task})

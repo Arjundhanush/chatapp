@@ -1,5 +1,4 @@
 import React from "react"
-import axios from "axios"
 function Create() {
     const [task, setTask] = React.useState("")
     const handleAdd = () => {
