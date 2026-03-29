@@ -8,7 +8,7 @@ function Create({ onAdd }) {
   const handleAdd = () => {
     if (!task.trim()) return
     setIsAdding(true)
-    axios.post('http://localhost:3001/add', { task: task })
+    axios.post('/api/add', { task: task })
       .then(() => {
         setTask('')
         setIsAdding(false)

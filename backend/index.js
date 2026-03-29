@@ -7,7 +7,9 @@ const TodoModel = require('./models/todo')
 app.use(cors())
 app.use(express.json())
 
-mongoose.connect('mongodb://127.0.0.1:27017/tododb')
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tododb'
+
+mongoose.connect(MONGO_URI)
     .then(() => {
         console.log('Connected to MongoDB')
     })

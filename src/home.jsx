@@ -8,7 +8,7 @@ function Home() {
 
   const fetchTodos = () => {
     setLoading(true)
-    axios.get('http://localhost:3001/get')
+    axios.get('/api/get')
       .then(response => {
         setTodos(response.data)
         setLoading(false)
@@ -24,13 +24,13 @@ function Home() {
   }, [])
 
   const handleToggle = (id) => {
-    axios.put(`http://localhost:3001/update/${id}`)
+    axios.put(`/api/update/${id}`)
       .then(() => fetchTodos())
       .catch(error => console.error('Error toggling task:', error))
   }
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3001/delete/${id}`)
+    axios.delete(`/api/delete/${id}`)
       .then(() => fetchTodos())
       .catch(error => console.error('Error deleting task:', error))
   }
