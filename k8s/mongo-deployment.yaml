@@ -1,0 +1,41 @@
+##############################################
+# Deployment — MongoDB Database
+##############################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: todo-app
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-app
+      component: database
+  template:
+    metadata:
+      labels:
+        app: todo-app
+        component: database
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc

@@ -1,20 +1,38 @@
-# Step 1: Base image
-FROM node:18
+# ============================================
+# Stage 1: Build the React frontend
+# ============================================
+FROM node:18-alpine AS build
 
-# Step 2: Set working directory
 WORKDIR /app
 
-# Step 3: Copy files
-COPY package*.json ./
+# Copy package files first for better Docker layer caching
+COPY package.json package-lock.json ./
 
-# Step 4: Install dependencies
-RUN npm install
+# Install dependencies (including devDependencies for build)
+RUN npm ci
 
-# Step 5: Copy remaining files
-COPY . .
+# Copy source code
+COPY index.html vite.config.js eslint.config.js ./
+COPY public ./public
+COPY src ./src
 
-# Step 6: Expose port
-EXPOSE 3000
+# Build the production bundle
+RUN npm run build
 
-# Step 7: Run app
-CMD ["npm", "start"]
+# ============================================
+# Stage 2: Serve with Nginx + reverse proxy
+# ============================================
+FROM nginx:alpine
+
+# Remove default nginx config
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built frontend from Stage 1
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

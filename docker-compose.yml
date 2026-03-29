@@ -1,16 +1,38 @@
-version: '3'
+version: '3.8'
 
 services:
-  web:
-    build: .
+  # ── Frontend (React + Nginx reverse proxy) ──
+  frontend:
+    build:
+      context: .
+      dockerfile: dockerfile
     ports:
-      - "3000:3000"
+      - "3000:80"
     depends_on:
-      - db
-    environment:
-      - MONGO_URI=mongodb://db:27017/todo
+      - backend
+    restart: unless-stopped
 
-  db:
-    image: mongo
+  # ── Backend (Express API) ──
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/tododb
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+  # ── Database (MongoDB) ──
+  mongo:
+    image: mongo:7
     ports:
       - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

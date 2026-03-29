@@ -1,0 +1,19 @@
+##############################################
+# Service — MongoDB (ClusterIP, internal only)
+##############################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: todo-app
+    component: database
+spec:
+  type: ClusterIP
+  selector:
+    app: todo-app
+    component: database
+  ports:
+    - port: 27017
+      targetPort: 27017
+      protocol: TCP
