@@ -6,15 +6,18 @@ function Create() {
 
   const handleAdd = () => {
     axios.post(
-      "https://todoapp-backend-bfj8.onrender.com/add",
+      "http://localhost:3001/add",
       { task: task }
     )
-    .then(result => console.log(result))
+    .then(result => {
+      console.log(result);
+      window.location.reload();
+    })
     .catch(error => console.error("Error adding task:", error));
   };
 
   return (
-    <div>
+    <div className="create_form">
       <input
         type="text"
         placeholder="Add a new task"
