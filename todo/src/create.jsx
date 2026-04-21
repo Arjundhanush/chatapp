@@ -9,11 +9,11 @@ function Create() {
       "http://localhost:3001/add",
       { task: task }
     )
-    .then(result => {
-      console.log(result);
-      window.location.reload();
-    })
-    .catch(error => console.error("Error adding task:", error));
+      .then(result => {
+        console.log(result);
+        window.location.reload();
+      })
+      .catch(error => console.error("Error adding task:", error));
   };
 
   return (
